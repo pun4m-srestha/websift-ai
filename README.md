@@ -2,55 +2,59 @@
 
 **Turn long web articles into clear, AI-generated summaries.**
 
-WebSift AI is a full-stack web application that extracts readable content from a webpage and uses AI to generate a concise summary. Instead of reading an entire article, users can paste a URL and get its key points in one place.
+WebSift AI is a full-stack web application that extracts readable content from webpages and uses AI to generate concise summaries. Users can paste an article URL and get its key information without having to read the entire page.
 
-**[Live Demo](https://websift-ai.vercel.app) · [GitHub Repository](https://github.com/pun4m-srestha/websift-ai)**
+**[🚀 Live Demo](https://websift-1gp9zydpv-pun4m-srestha.vercel.app/) · [💻 GitHub Repository](https://github.com/pun4m-srestha/websift-ai)**
 
 ## Features
 
-- **URL-Based Summarization:** Paste a webpage or article URL to generate a summary.
-- **Web Scraping:** Uses Cheerio to parse HTML and extract readable page content.
-- **AI-Powered Summaries:** Uses the Groq API with the `openai/gpt-oss-20b` model to generate summaries.
-- **Content Validation:** Checks extracted content and handles pages that don't contain enough readable text.
-- **URL Security:** Validates submitted URLs and includes protections against requests to private or reserved network addresses.
-- **API Integration:** Connects the React frontend to a separate Express backend through REST API endpoints.
-- **Error Handling:** Provides meaningful feedback when a URL is invalid, content extraction fails, or summarization encounters an error.
-- **Deployed Application:** Frontend hosted on Vercel and backend hosted on Render.
+- **URL-Based Summarization:** Generate summaries from article and webpage URLs.
+- **Web Scraping:** Uses Cheerio to extract readable text and page titles from HTML.
+- **AI-Powered Summaries:** Integrates the Groq API to generate concise summaries.
+- **URL Validation:** Validates submitted URLs and blocks requests to private or reserved network addresses.
+- **Content Validation:** Handles webpages with insufficient readable text.
+- **REST API Integration:** Connects the React frontend to the Express backend.
+- **Error Handling:** Handles invalid URLs, scraping failures, and AI API errors.
+- **Separate Deployment:** Frontend hosted on Vercel and backend hosted on Render.
 
 ## Tech Stack
 
-| Area | Technologies |
+| Technology | Purpose |
 |---|---|
-| Frontend | React, Vite, JavaScript |
-| Backend | Node.js, Express.js |
-| Web Scraping | Cheerio |
-| AI Integration | Groq API, `openai/gpt-oss-20b` |
-| API Communication | REST API, Fetch API |
-| Deployment | Vercel, Render |
-
-## How It Works
-
-1. The user enters a webpage URL in the frontend.
-2. The frontend sends the URL to the Express backend through the `/api/summarize` endpoint.
-3. The backend validates the URL and fetches the webpage HTML.
-4. Cheerio extracts the readable text and page title.
-5. The extracted content is passed to the Groq API for summarization.
-6. The backend returns the page title, source URL, summary, and word count as JSON.
-7. The frontend displays the generated summary to the user.
+| React | Frontend UI |
+| Vite | Frontend development and production builds |
+| JavaScript | Application logic |
+| Node.js | Backend runtime |
+| Express.js | REST API |
+| Cheerio | HTML parsing and text extraction |
+| Groq API | AI-powered summarization |
+| Fetch API | Frontend-to-backend communication |
+| Vercel | Frontend deployment |
+| Render | Backend deployment |
 
 ## Live Deployment
 
-- **Frontend:** https://websift-ai.vercel.app
-- **Backend:** https://websift-ai.onrender.com
-- **Health Check:** https://websift-ai.onrender.com/api/health
+- **Frontend:** [Open WebSift AI](https://websift-1gp9zydpv-pun4m-srestha.vercel.app/)
+- **Backend API:** https://websift-ai.onrender.com
+- **Backend Health Check:** [Check API Status](https://websift-ai.onrender.com/api/health)
 
-The backend health endpoint returns a JSON response indicating whether the API is running.
+The backend is an API service, not a standalone website. Opening its root URL may display `Cannot GET /` because no homepage route is defined. Use the health-check endpoint to verify the service.
+
+## How It Works
+
+1. The user enters an article or webpage URL.
+2. The React frontend sends the URL to the backend through the `/api/summarize` endpoint.
+3. Express validates the submitted URL.
+4. The backend fetches the webpage HTML and uses Cheerio to extract readable content.
+5. The extracted text is sent to the Groq API for summarization.
+6. The backend returns the title, source URL, generated summary, and extracted word count.
+7. The frontend displays the result.
 
 ## API Endpoints
 
 ### `GET /api/health`
 
-Checks the backend service status.
+Checks whether the backend service is running.
 
 Example response:
 
@@ -63,9 +67,9 @@ Example response:
 
 ### `POST /api/summarize`
 
-Accepts a webpage URL and returns its AI-generated summary.
+Accepts a webpage URL and returns the generated summary.
 
-Request body:
+Example request body:
 
 ```json
 {
@@ -73,7 +77,7 @@ Request body:
 }
 ```
 
-The response includes the source URL, page title, generated summary, and extracted word count.
+The response contains the source URL, page title, summary, and extracted word count.
 
 ## Run Locally
 
@@ -91,68 +95,69 @@ cd websift-ai
 
 ### 2. Install dependencies
 
-Install the frontend and backend dependencies in their respective project directories, according to the repository structure.
+Install the dependencies in the frontend and backend directories containing their respective `package.json` files.
 
 ```bash
 npm install
 ```
 
-Run this command in each application directory that has its own `package.json`.
+Run the command in each directory if the project uses separate frontend and backend packages.
 
 ### 3. Configure environment variables
 
-Configure the backend environment with the following variables:
+For the backend, create an environment file containing:
 
 ```env
 GROQ_API_KEY=your_groq_api_key
 FRONTEND_ORIGIN=http://localhost:5173
 ```
 
-Configure the frontend environment with:
+For the frontend, configure:
 
 ```env
 VITE_API_BASE_URL=http://localhost:5000
 ```
 
-Use the appropriate frontend origin for your local development port. Keep API keys on the backend and never expose them through frontend environment variables.
+Use the appropriate local frontend origin if your development server runs on a different port. Never expose your Groq API key in frontend code or commit secrets to GitHub.
 
-### 4. Start the applications
+### 4. Start the application
 
-Run the frontend and backend using the development scripts defined in their respective `package.json` files.
+Run the development commands defined in the frontend and backend `package.json` files.
 
-The frontend typically runs on `http://localhost:5173`, while the backend runs on `http://localhost:5000` during local development.
+The typical local URLs are:
+
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:5000`
 
 ## Deployment Configuration
 
-WebSift AI uses separate frontend and backend deployments.
+- **Vercel:** Hosts the frontend. Configure `VITE_API_BASE_URL` with `https://websift-ai.onrender.com`.
+- **Render:** Hosts the Express API and runs the backend entry point.
+- **CORS:** Configure `FRONTEND_ORIGIN` with the exact frontend origin permitted to access the API.
+- **Production Build:** Use `npm run build` for the Vite frontend.
 
-- **Vercel:** Hosts the production frontend. Set `VITE_API_BASE_URL` to the deployed Render backend URL.
-- **Render:** Hosts the Express API. Configure `GROQ_API_KEY` and `FRONTEND_ORIGIN` in the service environment variables.
-- **CORS:** Configure the backend to allow requests from the intended frontend origin.
-- **Production Build:** Build the Vite frontend with `npm run build`.
-
-Environment variables must be configured separately for each deployment platform. Never commit API keys or other secrets to the repository.
+Configure environment variables separately on each deployment platform. Redeploy the frontend after changing Vite environment variables.
 
 ## What I Learned
 
-Building WebSift AI gave me practical experience with full-stack development, including:
+Through this project, I gained practical experience with:
 
-- Integrating a third-party AI API into a web application.
-- Scraping and extracting readable content from HTML pages.
-- Connecting a React frontend to an Express REST API.
-- Validating URLs and handling unreliable external webpages.
-- Deploying frontend and backend services independently.
-- Debugging production API connectivity, environment variables, and CORS configuration.
+- Integrating third-party AI APIs into a full-stack application.
+- Scraping webpages and extracting readable content from HTML.
+- Building REST API endpoints with Express.
+- Validating URLs and handling external webpage failures.
+- Deploying frontend and backend services separately.
+- Debugging production API requests, environment variables, and CORS issues.
 
 ## Future Improvements
 
-- Add options for short, medium, and detailed summaries.
-- Improve content extraction for websites with complex layouts.
-- Add summary history and the ability to revisit previous results.
-- Improve the presentation and readability of generated summaries.
+- Add multiple summary lengths.
+- Improve extraction for complex webpage layouts.
+- Add summary history.
+- Improve the presentation of generated summaries.
 
 ---
 
 **Built by Punam Srestha**
 
-[GitHub](https://github.com/pun4m-srestha) · [Project Repository](https://github.com/pun4m-srestha/websift-ai)
+[GitHub Profile](https://github.com/pun4m-srestha) · [WebSift AI Repository](https://github.com/pun4m-srestha/websift-ai)
